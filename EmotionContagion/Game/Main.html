@@ -1,0 +1,101 @@
+{{ block content }}
+<div class="game-body" id="game-body">
+        <p>
+            You are the {{ role }} player, choose your action!
+        </p>
+        <div class="game-table">
+            <div class="row">
+                <div class="cell"> </div>
+                <div class="cell"> C </div>
+                <div class="cell"> D </div>
+            </div>
+            <div class="row">
+                <div class="cell"> c </div>
+                <div class="cell"> {{ c11 }} </div>
+                <div class="cell"> {{ c12 }} </div>
+            </div>
+            <div class="row">
+                <div class="cell"> d </div>
+                <div class="cell"> {{ c21 }} </div>
+                <div class="cell"> {{ c22 }} </div>
+            </div>
+        </div>
+        <div>
+            <button type="button" onclick="decision(0)"> {{ A }} </button>
+            <button type="button" onclick="decision(1)"> {{ B }} </button>
+        </div>
+        <input type="hidden" name="dRT" id="dRT">
+        <input type="hidden" name="iDec" id="iDec">
+        <button id="next-btn" style="display: none;"></button>
+    </div>
+{{ endblock }}
+
+{{ block scripts }}
+    <script>
+        var tStart, tNow
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            tStart = new Date();
+            console.log(`Starts now: ${tStart}`);
+        });
+
+        function decision(value) {
+            tNow = new Date();
+            let dRT = tNow - tStart;
+            let nextBtn = document.getElementById('next-btn');
+            let inputDec = document.getElementById('iDec');
+            let inputRT = document.getElementById('dRT');
+            
+            inputDec.value = value;
+            inputRT.value = dRT;
+            nextBtn.click();
+        }
+        
+    </script>
+{{ endblock }}
+
+{{ block styles }}
+    <style>
+        .debug-info {
+            top: 120vh;
+        }
+        #game-body {
+            width: 100vw;
+            height: 100vh;
+            background-color: lightgrey;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50vh;
+            left: 50vw;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+        }
+        .game-table {
+            background-color: darkgrey;
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        p {
+            color: black;
+            background-color: lightgreen;
+        }
+    </style>
+{{ endblock }}
+
+
