@@ -1,0 +1,13 @@
+{{ block title }}Ваш выбор{{ endblock }}
+{{ block content }}
+    <p>
+        Вы участник Б.
+        Участник А отправил вам {{ group.sent_amount }}, и вы получили {{ tripled_amount }}.
+        Сейчас у вас есть {{ tripled_amount }}.
+        Какую сумму вы хотите отправить участнику А?
+    </p>
+
+    {{ formfields }}
+    <p>{{ next_button }}</p>
+
+{{ endblock }}

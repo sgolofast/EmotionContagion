@@ -1,0 +1,14 @@
+{{ block title }}Итог{{ endblock }}
+{{ block content }}
+    <p>
+
+        {{ if player.id_in_group == 1 }}
+            Вы решили оставить себе <strong>{{ group.kept }}</strong>.
+        {{ else }}
+            Участник А оставил себе <strong>{{ group.kept }}</strong>, 
+            поэтому вы получаете <strong>{{ offer }}</strong>.
+        {{ endif }}
+
+        {{ next_button }}
+    </p>
+{{ endblock }}

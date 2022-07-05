@@ -1,0 +1,13 @@
+{{ block title }}Ваш выбор{{ endblock }}
+{{ block content }}
+
+    <p>
+    Вы участник А. У вас есть {{C.ENDOWMENT}}. Какую сумму вы хотите отправить участнику Б (от {{ C.BASELINE }}
+    до {{ C.ENDOWMENT }})?
+    </p>
+    {{ formfields }}
+    <p>
+    {{ next_button }}
+    </p>
+
+{{ endblock }}

@@ -1,0 +1,257 @@
+{% extends "global/Page.html" %}
+{% load otree static %} 
+
+{% block title %}
+    <!-- Do you want to post memes or see memes? -->
+{% endblock %}
+{% block content %}
+
+<script>
+// we create hidden input to measure the time spent in the page
+let dRT          = document.createElement("input");
+    dRT.type         = 'hidden';
+    dRT.name         = 'dRTDec1';
+    dRT.id           = 'dRTDec1';
+    dRT.value        = '';
+    var TStart       = new Date().getTime();
+    var TEnd         = new Date().getTime();
+</script>  
+
+<div class="container">
+  <div class="choicetrial">
+    <h2>Your decision...</h2>
+    <br />
+    Do you want to post memes or see memes?
+    <br />
+    <br />
+      {{ for choice in Constants.choices }}
+        <button id="iT" name="iTrialDec" class="btn effect01" target="_blank" value="{{choice}}">{{choice}}</button>
+      {{ endfor }}
+  </div>
+  <div class="feedback">
+    <h3>Your last post...</h3>
+    {{ if subsession.round_number > 1 }} <!-- access the last round feedback only if it's past round 1 -->
+        {{ if prev_player.iTrialDec == 'Post' }}  <!-- and last trial they decided to post -->
+            <br />
+            <h1><p id="controltext">{{ likes }} <span style="font-size:120%; font-family:Garamond; color:red;">&hearts;</span> people out of 40 liked your post</p></h1>
+            <h1><p id="emotionaltext">{{ dislikes }} <span style="font-size:100%; color:rgb(128, 18, 18);">&#128148;</span> people out of 40 <b>did not</b> like your post</p></h1>
+            <br />
+            <div class="polaroid">
+              <img style="width:100%" src="{{ static image_path }}"/>
+            </div>
+        {{ endif }}
+    {{ endif }}
+  </div>  
+</div>
+
+<script>   
+// Load JavaScript variables from init file
+treatment = js_vars.treatment
+
+    document.addEventListener("DOMContentLoaded", function(debug=true) {
+        console.log('Loading info');
+        let OtreeBody     = document.getElementsByClassName("_otree-content")[0];
+        OtreeBody.appendChild(dRT);
+        
+
+        function addtoev() {
+        // var y = document.getElementById("container");
+        // var x = y.getElementById("choicetrial");
+        var bns = document.getElementsByTagName("button"); 
+        for (i = 0; i < bns.length; i++) {
+            bns[i].addEventListener("click", function() {
+            console.log('A button was pressed');
+            TEnd      = new Date().getTime();
+            dRT.value = +TEnd -TStart ;   // end the timer and rewrite the RT value
+          });
+        }} 
+        // what this function is doing is the same as we do when we check
+        // if somebody pressed a key, but instead of checking keys, 
+        // we check whether they press any buttons :D
+
+        window.addEventListener("load",function() {
+        addtoev();
+        });
+
+        //check in the console if the communication between javascript and python is working
+        console.log(treatment);
+        if (js_vars.treatment=='Control') {
+          //if we are in the control treatment, we don't show amount of dislikes
+          let x = document.getElementById('emotionaltext');
+          x.style.visibility = 'hidden';
+        } else {
+          //if we are in the emotional treatment, we don't show the amount of likes
+          let c = document.getElementById('controltext');
+          c.style.visibility = 'hidden';
+        }
+      });
+</script>
+
+<!-- CSS STYLE FOR THE BUTTONS -->
+
+<style>
+/* * {
+    margin: 0;
+    padding: 0;
+  }
+   */
+  html,
+  body { 
+    height: 100%;
+    width: 100%;
+    background: #FFF;
+    font-family: 'Noto Sans JP', sans-serif;
+    /* font-weight: 400; 
+     #FFF; for white*/
+  }
+  
+  .buttons {
+    display: flex;
+    flex-direction: row;
+        flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  /*   padding: 2em 0em; */
+  }
+
+  .container {
+    align-items: flex-start; /* i want the things at the top */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    background-color: #FFF;
+    padding:  40px 0px;
+    width: 100vw; 
+    /* px is pixels and vw is viewing width,
+    if you put 100vw (100%) that would basically solve a bit the problem of
+    different screen sizes but it does something weird to the format when i trial test it :_D*/
+  }
+
+  .choicetrial {
+    width: 50vw
+  }
+
+  .feedback {
+    width: 50vw;
+    /* align-items: center;
+    justify-content: center;
+    text-align: center; */
+  }
+  
+  div.polaroid {
+    width: 70%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 25px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.4em;
+    font-size: 1.2em;
+    font-family: sans-serif;
+  }
+
+  h2 {
+    text-align: center;
+    color:  #000 ;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.4em;
+    font-size: 2em;
+  }
+
+  h3 {
+    text-align: left;
+    color:  #000 ;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.4em;
+    font-size: 2em;
+  }
+  
+  p {
+    text-align: left;
+    color: #444;
+    letter-spacing: 0.05em;
+    font-size: 0.8em;
+    margin: 0 0 2em;
+  }
+  
+  
+  .btn {
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 45px;
+    max-width: 160px;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 100%;
+  }
+  .btn:hover {
+    text-decoration: none;
+  }
+  
+  /*btn_background*/
+  .effect01 {
+    color: #FFF;
+    border: 4px solid #000;
+    box-shadow:0px 0px 0px 1px #000 inset;
+    background-color: #000;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+  }
+  .effect01:hover {
+    border: 4px solid #666;
+    background-color: #FFF;
+    box-shadow:0px 0px 0px 4px #EEE inset;
+  }
+  
+  /*btn_text*/
+  .effect01 span {
+    transition: all 0.2s ease-out;
+    z-index: 2;
+  }
+  .effect01:hover span{
+    letter-spacing: 0.13em;
+    color: #333;
+  }
+  
+  /*highlight*/
+  .effect01:after {
+    background: #FFF;
+    border: 0px solid #000;
+    content: "";
+    height: 155px;
+    left: -75px;
+    opacity: .8;
+    position: absolute;
+    top: -50px;
+    -webkit-transform: rotate(35deg);
+            transform: rotate(35deg);
+    width: 50px;
+    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);/*easeOutCirc*/
+    z-index: 1;
+  }
+  .effect01:hover:after {
+    background: #FFF;
+    border: 20px solid #000;
+    opacity: 0;
+    left: 120%;
+    -webkit-transform: rotate(40deg);
+            transform: rotate(40deg);
+  }
+</style>
+
+
+
+
+{% endblock %}

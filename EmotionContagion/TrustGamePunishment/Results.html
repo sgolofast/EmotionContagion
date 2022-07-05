@@ -1,0 +1,31 @@
+{{ block title }}Итог{{ endblock }}
+{{ block content }}
+
+    {{ if player.id_in_group == 1 }}
+        <p>
+            Вы приняли решение отправить участнику Б {{ group.sent_amount }}.
+            Участник Б вернул вам {{ group.sent_back_amount }}.
+        </p>
+        <p>
+            В начале игры у вас было {{ C.ENDOWMENT }},
+            в итоге вы получаете: 
+            {{ C.ENDOWMENT }} - {{ group.sent_amount }} + {{ group.sent_back_amount }} = <strong>{{ player.payoff }}</strong>
+        </p>
+        
+    {{ else }}
+        <p>
+           Участник А отправил вам {{ group.sent_amount }}.
+            Эта сумма была увеличена втрое, и вы получили {{ tripled_amount }}.
+            Вы вернули {{ group.sent_back_amount }}.
+        </p>
+        <p>
+            В итоге вы получаете:
+            {{ tripled_amount }} - {{ group.sent_back_amount }} =<strong>{{ player.payoff }}</strong>
+        </p>
+    {{ endif }}
+
+    <p>{{ next_button }}</p>
+
+{{ endblock }}
+
+
